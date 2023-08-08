@@ -1,7 +1,10 @@
 package sg.edu.rp.c346.id22023910.mymovies;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import sg.edu.rp.c346.id22023910.mymovies.Movie;
 import android.os.Bundle;
@@ -56,16 +59,49 @@ public class EditActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper db = new DBHelper(EditActivity.this);
-                db.deleteMovie(data.getId());
-                finish();
+
+                AlertDialog.Builder myBuilder = new AlertDialog.Builder(EditActivity.this);
+                myBuilder.setTitle("Danger");
+                myBuilder.setMessage("Are you sure you want to delete the movie " + etTitle.getText().toString());
+                myBuilder.setCancelable(false);
+
+                myBuilder.setNegativeButton("DELETE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DBHelper db = new DBHelper(EditActivity.this);
+                        db.deleteMovie(data.getId());
+                        finish();
+                    }
+                });
+
+                myBuilder.setPositiveButton("CANCEL", null);
+                AlertDialog myDialog = myBuilder.create();
+                myDialog.show();
             }
         });
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
+                AlertDialog.Builder myBuilder = new AlertDialog.Builder(EditActivity.this);
+                myBuilder.setTitle("Danger");
+                myBuilder.setMessage("Are you sure you want to discard the changes");
+                myBuilder.setCancelable(false);
+                myBuilder.setPositiveButton("DO NOT DISCARD", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                myBuilder.setNegativeButton("DISCARD", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                AlertDialog myDialog = myBuilder.create();
+                myDialog.show();
             }
         });
 
